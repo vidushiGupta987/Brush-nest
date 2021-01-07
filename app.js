@@ -1,5 +1,6 @@
 //Load modules
 const express = require('express');
+const Handlebars = require('handlebars');
 const exphbs = require('express-handlebars');
 const  {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access')
 const mongoose = require('mongoose');
@@ -13,7 +14,9 @@ const keys = require('./config/keys');
 //user collection
 const User = require('./models/user');
 const user = require('./models/user');
+//Linkk passport to server
 require('./passport/google-passport');
+require('./passport/facebook-passport');
 //initialize express application
 const app = express();
 //express config
@@ -33,7 +36,8 @@ app.use((req, res, next) =>{
 });
 //setup template engine
 app.engine('handlebars', exphbs({
-    defaultLayout: 'main'
+    defaultLayout: 'main',
+    handlebars: allowInsecurePrototypeAccess(Handlebars)
 }));
 app.set('view engine', 'handlebars');
 //setup static file to serve css, javascript and images
@@ -70,15 +74,23 @@ app.get('/auth/google/callback',
     // Successful authentication, redirect home.
     res.redirect('/profile');
   });
+  //FACEBOOK AUTH ROUTE
+  app.get('/auth/facebook',
+  passport.authenticate('facebook' , {scope: 'email'}));
+
+app.get('/auth/facebook/callback',
+  passport.authenticate('facebook', { failureRedirect: '/', scope: 'email' }),
+(req, res) => {
+    // Successful authentication, redirect home.
+    res.redirect('/profile');
+  });
+  //handle profile route
   app.get('/profile', (req,res) => {
       User.findById({_id: req.user._id}).lean()
       .then((user) =>{
         res.render('profile', {
-            user:user
-        });
-      }
-      )
-     
+           user:user  });
+      })
   });
   //handle user logout
 app.get('/logout',(req,res) => {
