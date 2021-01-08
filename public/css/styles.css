@@ -39,3 +39,13 @@
     background-color: rgb(195, 42, 163);
     color: #fff;
 }
+#welcome{
+    color: rgb(47, 163, 209);
+}
+h1{
+    text-align: center;
+}
+#main{
+    margin-top: 60px;
+    margin-bottom: 50px;
+}
