@@ -24,7 +24,7 @@
    {{else}}
    <form action="/addPhone" method="POST" class="form-inline">
   <div class="form-group mx-sm-3 mb-2">
-    <input type="number" class="form-control" name="phone" placeholder="Enter phone number">
+    <input type="number" class="form-control" name="phone" placeholder="Enter phone number" required>
   </div>
   <button type="submit" class="btn btn-primary mb-2"><i class="fa fa-check"></i></button>
 </form>
@@ -34,7 +34,7 @@
     {{else}}
     <form action="/addlocation" method="POST" class="form-inline">
   <div class="form-group mx-sm-3 mb-2">
-    <input type="text" class="form-control" name="location" placeholder="Enter your location/city/country">
+    <input type="text" class="form-control" name="location" placeholder="Enter your location/city/country" required>
   </div>
   <button type="submit" class="btn btn-primary mb-2"><i class="fa fa-check"></i></button>
 </form>

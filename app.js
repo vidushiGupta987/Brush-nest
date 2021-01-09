@@ -97,6 +97,14 @@ app.get('/auth/facebook/callback',
            user:user  });
       })
   });
+  //handle route for all users
+  app.get('/users' , (req,res) => {
+      User.find({}).then((users) => {
+          res.render('users', {
+              users:users
+          });
+      });
+  });
   //handle email post route
   app.post('/addEmail', (req,res) =>{
       const email = req.body.email;
