@@ -19,6 +19,27 @@
    <button type="submit" class="btn btn-danger">Save</button>
    </form>
    {{/if}}
+   {{#if user.phone}}
+   <p class="card-text"><i class="fa fa-phone"></i> {{user.phone}}</p>
+   {{else}}
+   <form action="/addPhone" method="POST" class="form-inline">
+  <div class="form-group mx-sm-3 mb-2">
+    <input type="number" class="form-control" name="phone" placeholder="Enter phone number">
+  </div>
+  <button type="submit" class="btn btn-primary mb-2"><i class="fa fa-check"></i></button>
+</form>
+    {{/if}}
+    {{#if user.location}}
+    <p class="card-text"><i class="fa fa-map-marker"></i> {{user.location}}</p>
+    {{else}}
+    <form action="/addlocation" method="POST" class="form-inline">
+  <div class="form-group mx-sm-3 mb-2">
+    <input type="text" class="form-control" name="location" placeholder="Enter your location/city/country">
+  </div>
+  <button type="submit" class="btn btn-primary mb-2"><i class="fa fa-check"></i></button>
+</form>
+{{/if}}
+         
              </div>
     </div>
 </div>
