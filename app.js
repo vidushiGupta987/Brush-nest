@@ -11,9 +11,9 @@ const cookieParser = require("cookie-parser");
 
 //connect to MongoURI exported from external file
 const keys = require('./config/keys');
-//user collection
+//load models
 const User = require('./models/user');
-const user = require('./models/user');
+const Post = require('./models/post');
 //Linkk passport to server
 require('./passport/google-passport');
 require('./passport/facebook-passport');
@@ -98,10 +98,19 @@ app.get('/auth/facebook/callback',
       })
   });
   //handle route for all users
-  app.get('/users' , (req,res) => {
+  app.get('/users' , ensureAuthentication, (req,res) => {
       User.find({}).then((users) => {
           res.render('users', {
               users:users
+          });
+      });
+  });
+  //display one user profile 
+  app.get('/user/:id', (req,res) =>{
+      User.findById({_id: req.params.id})
+      .then((user) => {
+          res.render('user', {
+              user:user
           });
       });
   });
@@ -141,6 +150,41 @@ app.get('/auth/facebook/callback',
     });
 });
   });
+  //get route for posts on the page
+app.get('/addPost', (req,res) => {
+    res.render('addPost');
+});
+//handle post route 
+app.post('/savePost', (req,res) => {
+  var allowComments;
+    if(req.body.allowComments){
+        allowComments = true;
+    }else{
+        allowComments = false;
+    }
+    const newPost = {
+        title: req.body.title,
+        body: req.body.body,
+        status: req.body.status,
+        allowComments: allowComments,
+        user: req.user._id
+    }
+    new Post(newPost).save()
+    .then(() => {
+        res.redirect('/posts');
+    });
+});
+//handle post route
+app.get('/posts', ensureAuthentication, (req,res) => {
+    Post.find({status:'public'})
+    .populate('user')
+    .sort({date: 'desc'})
+    .then((posts) => {
+        res.render('publicPosts',{
+         posts:posts   
+        });
+    });
+});
   //handle user logout
 app.get('/logout',(req,res) => {
     req.logout();
