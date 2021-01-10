@@ -1,0 +1,17 @@
+<div class="container">
+     <h1>Public Posts</h1>
+   {{#each posts}}
+   <div class="media">
+       <img id="comment-user-picture" class="mr-3" src="{{user.image}}">
+  <div class="media-body">
+    <h5 class="mt-0">{{user.fullname}} <small><i class="fa fa-globe"></i></small></h5>
+  <h4>{{title}}</h4>
+   <p>{{body}}</p>
+   <small>{{date}}</small>
+    </div>
+</div>
+<hr>
+{{else}}
+<p>This user does not have any posts...</p>
+{{/each}}
+</div>

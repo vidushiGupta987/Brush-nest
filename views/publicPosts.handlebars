@@ -3,14 +3,38 @@
     <div class="media">
   <img class="mr-3 post-user-pic" src="{{user.image}}">
   <div class="media-body">
-    <h3 class="mt-0">{{user.fullname}}</h3>
-<h5>{{title}} <small class="red"><i class="fa fa-globe"></i></small></h5>
+    <a class="public-name-link" title="Click here to see public posts of this user" href="/showposts/{{user._id}}"><h3 class="mt-0">{{user.fullname}}</h3></a>
+<h5>{{title}} <small><i class="fa fa-globe"></i></small></h5>
 <p>{{body}}</p>
 <small>{{date}}</small>
+<br>
+{{#if allowComments}}
+{{#each comments}}
+<div class="media mt-3">
+      <a class="pr-3" href="#"> <img id="comment-user-picture" src="{{commentUser.image}}"> </a>
+      <div class="media-body">
+        <a class="public-name-link" href="/showposts/{{commentUser._id}}"><h5 class="mt-0"> {{commentUser.fullname}} </h5></a>
+        <p>{{commentBody}}</p>
+        <small>{{commentDate}}</small>
+        </div>
+    </div>
+    {{/each}}
+<br>
+<form action="/addComment/{{_id}}" method="POST" class="form-inline">
+  <div class="form-group mx-sm-3 mb-2">
+    <input type="text" name="commentBody" class="form-control" placeholder="Leave comment...">
+  </div>
+  <button type="submit" class="btn btn-primary mb-2">
+    <i class="fa fa-comment"></i>
+  </button>
+</form>
+{{else}}
+<p class="red">The user has turned off the comments.</p>
+{{/if}}
   </div>
 </div>
 <hr>
 {{else}}
-<p>You are all caught up!!</p>
+<p>There are no posts to see :(</p>
 {{/each}}
 </div>

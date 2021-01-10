@@ -53,8 +53,11 @@
 <p>{{body}}</p>
 <small>{{date}}</small>
 <br>
-<p>
-  <a href="/editPost/{{_id}}"><i class="fa fa-pencil"></i></a>
+<p> <a title="Edit this post" href="/editPost/{{_id}}"><i id="edit-button" class="fa fa-edit"></i></a>
+  <form action="/{{_id}}?_method=DELETE" method="POST">
+ <button title="Delete this post" type="submit" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+  </form>
+
 </p>
   </div>
 </div>

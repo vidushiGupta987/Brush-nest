@@ -1,6 +1,11 @@
 #homepage{
     text-align: center;
 }
+/* Modify the backgorund color */ 
+.navbar-custom { 
+	background-color: lightgreen; 
+} 
+
 .btn-facebook{
     background-color: #4aa1f3;
     border-radius: 0%;
@@ -60,8 +65,24 @@ h1{
     height: auto;
 }
 .red{
-    color:red;
+    color : red;
 }
-.green{
-    color: green;
+#comment-user-picture{
+    width: 65px;
+    height: auto;
+}
+#edit-button{
+    font-size: 20px;
+    color: red;
+
+}
+.public-name-link:link,
+.public-name-link:visited{
+    text-decoration: none;
+    color: rgb(133, 133, 209);
+}
+.users-link:link,
+.users-link:visited{
+    text-decoration: none;
+    color: rgb(133, 133, 209);
 }
