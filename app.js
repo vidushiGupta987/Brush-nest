@@ -8,7 +8,7 @@ const passport = require('passport');
 const session = require("express-session");
 const  bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-
+const methodOverride = require('method-override');
 //connect to MongoURI exported from external file
 const keys = require('./config/keys');
 //load models
@@ -32,6 +32,7 @@ app.use(session({ secret: 'keyboard cat',
    resave: true,
    saveUninitialized: true
 }));
+app.use(methodOverride('_method'));
 app.use(passport.initialize());
 app.use(passport.session());
 //set global variable for user
@@ -91,11 +92,14 @@ app.get('/auth/facebook/callback',
   });
   //handle profile route
   app.get('/profile', ensureAuthentication,(req,res) => {
-      User.findById({_id: req.user._id}).lean()
-      .then((user) =>{
-        res.render('profile', {
-           user:user  });
-      })
+     Post.find({user: req.user._id})
+     .populate('user')
+     .sort({date: 'desc'})
+     .then((posts) => {
+         res.render('profile', {
+             posts:posts
+         });
+     });
   });
   //handle route for all users
   app.get('/users' , ensureAuthentication, (req,res) => {
@@ -172,6 +176,35 @@ app.post('/savePost', (req,res) => {
     new Post(newPost).save()
     .then(() => {
         res.redirect('/posts');
+    });
+});
+//handle edit Post route
+app.get('/editPost/:id', (req,res) => {
+    Post.findOne({_id:req.params.id})
+    .then((post) => {
+        res.render('editingPost',{
+            post:post
+        });
+    });
+});
+//Handle put route to save edited posts
+app.put('/editingPost/:id', (req,res) => {
+    Post.findOne({_id: req.params.id})
+    .then((post) =>{
+        var allowComments;
+        if(req.body.allowComments){
+            allowComments = true;
+        }else{
+            allowComments = false;
+        }
+        post.title = req.body.title;
+        post.body = req.body.body;
+        post.status  = req.body.status;
+        post.allowComments = allowComments;
+        post.save()
+        .then(() => {
+            res.redirect('/profile');
+        });
     });
 });
 //handle post route
